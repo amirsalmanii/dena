@@ -1,12 +1,18 @@
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.authtoken.models import Token
 from . import serializers
 from .models import User
 
 
-class LoginUser(APIView):
+class MyPagination(PageNumberPagination):
+    page_size = 20
+
+
+class LoginUserView(APIView):
     def post(self, request):
         serializer = serializers.LoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -26,7 +32,7 @@ class LoginUser(APIView):
         return Response(serializer.errors, status=400)
 
 
-class RegisterUser(APIView):
+class RegisterUserView(APIView):
     def post(self, request):
         serializer = serializers.RegisterSerializer(data=request.data)
         if serializer.is_valid():
@@ -39,4 +45,40 @@ class RegisterUser(APIView):
                 user.save()
                 return Response('created', status=201)
             return Response('کاربر قبلا وجود دارد', status=400)
+        return Response(serializer.errors, status=400)
+
+
+class UsersListView(ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+
+
+class UserDetailUpdateView(APIView):
+    def get(self, request, pk):
+        user = User.objects.filter(id=pk)
+        if user:
+            user = user.first()
+            serializer = serializers.UserDetailSerializer(user)
+            return Response(serializer.data, status=200)
+        return Response(status=404)
+    
+    def put(self, request, pk):
+        user = User.objects.filter(id=pk)
+        if user:
+            user = user.first()
+            serializer = serializers.UserDetailSerializer(instance=user, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=200)
+            else:
+                return Response(serializer.errors, status=400)
+        return Response(status=404)
+
+
+class CreateUserView(APIView):
+    def post(self, request):
+        serializer = serializers.UserCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
