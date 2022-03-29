@@ -75,10 +75,22 @@ class UserDetailUpdateView(APIView):
         return Response(status=404)
 
 
-class CreateUserView(APIView):
+class ForgetPassword(Apiview):
     def post(self, request):
-        serializer = serializers.UserCreateSerializer(data=request.data)
+        serializer = serializers.RegisterSerializer(data=request.data)
+        '''
+        از این سریالایزر برای دریافت ایمیل و رمز برای تغییر رمز استفاده شده
+        '''
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            email = serializer.validated_data['email']
+            password = serializer.validated_data['password2']
+            user = User.objects.filter(email=email)
+            if user:
+                user = user.first()
+                user.set_password(password)
+                user.save()
+                return Response('رمز با موفقیت تغییر یافت', status=200)
+            else:
+                return Response(status=404)
+        else:
+            return Response(serializer.errors, status=400)
