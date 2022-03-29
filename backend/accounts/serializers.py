@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from .models import User
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(allow_null=False)
@@ -20,3 +20,16 @@ class RegisterSerializer(serializers.Serializer):
         elif len(password1) <= 7:
             raise serializers.ValidationError('رمز باید هشت رقم باشد')
         return data
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'is_superuser', 'first_name', 'last_name', 'email')
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ('password', 'groups', 'user_permissions', 'date_joined', 'last_login')
+        
