@@ -7,7 +7,7 @@ SECRET_KEY = secret.s_key
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # local apps
     'accounts',
+    'products'
     # third party
     'rest_framework',
     'rest_framework.authtoken',
