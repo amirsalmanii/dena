@@ -30,7 +30,7 @@ class Product(models.Model):
     image2 = models.ImageField(upload_to='products/', blank=True, null=True)
     image3 = models.ImageField(upload_to='products/', blank=True, null=True)
     thumbnail = models.ImageField(upload_to='products/th/', blank=True, null=True)
-    descreption = RichTextUploadingField(null=True, blank=True)
+    descreption = models.TextField(null=True, blank=True)
     hide = models.BooleanField(default=False)
     price = models.BigIntegerField(default=0)
     company_price = models.BigIntegerField(default=0)
