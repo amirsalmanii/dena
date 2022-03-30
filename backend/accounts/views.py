@@ -75,7 +75,7 @@ class UserDetailUpdateView(APIView):
         return Response(status=404)
 
 
-class ForgetPassword(Apiview):
+class ForgetPassword(APIView):
     def post(self, request):
         serializer = serializers.RegisterSerializer(data=request.data)
         '''
