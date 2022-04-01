@@ -1,5 +1,5 @@
 from django.db import models
-
+from accounts.models import User
 
 class NewsCategory(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -14,3 +14,17 @@ class NewsCategory(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class News(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=250)
+    title_image = models.ImageField(upload_to='news')
+    body = models.TextField(blank=True)
+    created_at = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("-id",)
+        
+    def __str__(self):
+        return self.title
