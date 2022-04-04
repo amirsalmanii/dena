@@ -10,7 +10,7 @@ class NewsCategory(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = self.name.replace(" ", "-")
-        super(Category, self).save(*args, **kwargs)
+        super(NewsCategory, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name
@@ -18,8 +18,9 @@ class NewsCategory(models.Model):
 
 class News(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    news_category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
-    title_image = models.ImageField(upload_to='news')
+    title_image = models.ImageField(upload_to='news', blank=True)
     body = models.TextField(blank=True)
     created_at = models.DateField(auto_now_add=True)
 
