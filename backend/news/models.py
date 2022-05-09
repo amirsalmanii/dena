@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 
+
 class NewsCategory(models.Model):
     name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=254, unique=True, allow_unicode=True, blank=True)
