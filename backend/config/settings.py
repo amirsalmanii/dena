@@ -20,11 +20,15 @@ INSTALLED_APPS = [
     'accounts',
     'products',
     'news',
+    'discount',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
     'django_cleanup.apps.CleanupConfig',
+    'django_crontab',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -103,6 +107,19 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# ckeditor configs
+CKEDITOR_UPLOAD_PATH = 'uploader/'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full'
+    }
+}
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
+
+# cron job
+CRONJOBS = [
+    ('1 0 * * *', 'discount.cron.my_scheduled_job')
+]
