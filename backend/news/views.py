@@ -31,7 +31,7 @@ class NewsUpdateDetailDestroyView(APIView):
             serializer = serializers.NewsSerializer(news.first())
             return Response(serializer.data, status=200)
         return Response(status=404)
-    
+
     def put(self, request, pk):
         news = models.News.objects.filter(id=pk)
         if news:
@@ -41,7 +41,7 @@ class NewsUpdateDetailDestroyView(APIView):
                 return Response(status=200)
             return Response(serializer.errors, status=400)
         return Response(status=404)
-    
+
     def delete(self, request, pk):
         news = models.News.objects.filter(id=pk)
         if news:

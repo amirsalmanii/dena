@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class NewsCategory(models.Model):
@@ -22,7 +23,7 @@ class News(models.Model):
     news_category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     title_image = models.ImageField(upload_to='news', blank=True)
-    body = models.TextField(blank=True)
+    body = RichTextUploadingField()
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:
