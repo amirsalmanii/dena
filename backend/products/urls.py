@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     # categories urls
     path("categories/", views.listCategoryView.as_view(), name="list_category"),
+    path('categories-m2-wp/', views.ListCategories2WithoutPagination.as_view(), name='list_category2-without-pagination'),
     path(
         "category/create/", views.CreateCategoryView.as_view(), name="create_category"
     ),

@@ -23,6 +23,15 @@ class listCategoryView(ListAPIView):
     serializer_class = serializers.CategoriesSerializer
 
 
+class ListCategories2WithoutPagination(ListAPIView):
+    """
+    gives all categories
+    good for admin panel
+    """
+    queryset = models.Category.objects.all()
+    serializer_class = serializers.CategoriesSerializer
+
+
 class UpdateCategoryView(RetrieveUpdateAPIView):
     queryset = models.Category.objects.all()
     serializer_class = serializers.CreateCategorySerializer

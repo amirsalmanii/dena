@@ -8,11 +8,8 @@ THUMB_SIZE = (400, 400)
 
 
 class Category(models.Model):
-    parent = models.ForeignKey(
-        "self", on_delete=models.CASCADE, null=True, blank=True, related_name="children"
-    )
-    name = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(max_length=254, unique=True, allow_unicode=True, blank=True)
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=254, allow_unicode=True, blank=True)
 
     class Meta:
         ordering = ("-id",)
@@ -26,7 +23,7 @@ class Category(models.Model):
 
 
 class Product(models.Model):
-    categories = models.ManyToManyField(Category, related_name="products")
+    categories = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     name = models.CharField(max_length=255)
     slug = models.SlugField(
         max_length=255, unique=True, blank=True, null=True, allow_unicode=True
@@ -41,7 +38,7 @@ class Product(models.Model):
     company_price = models.BigIntegerField(default=0)
     price_after_discount = models.BigIntegerField(default=0)
     manufacturer_company = models.CharField(max_length=120, null=True, blank=True)
-    quantity = models.PositiveBigIntegerField(default=0)
+    repository_quantity = models.PositiveBigIntegerField(default=0)
 
     class Meta:
         ordering = ("-id",)
