@@ -3,14 +3,15 @@ from rest_framework.views import APIView
 from rest_framework.generics import (
     ListAPIView,
     CreateAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
     RetrieveUpdateAPIView,
     DestroyAPIView,
 )
 from rest_framework.response import Response
 from . import serializers
 from . import models
-
-# categories views
+from accounts.views import MyPagination
 
 
 class CreateCategoryView(CreateAPIView):
@@ -19,6 +20,7 @@ class CreateCategoryView(CreateAPIView):
 
 
 class listCategoryView(ListAPIView):
+    pagination_class = MyPagination
     queryset = models.Category.objects.all()
     serializer_class = serializers.CategoriesSerializer
 
@@ -42,21 +44,26 @@ class DeleteCategoryView(DestroyAPIView):
     serializer_class = serializers.CreateCategorySerializer
 
 
-# products views
-
+# products_viewss
 
 class ProductsListView(ListAPIView):
+    pagination_class = MyPagination
     queryset = models.Product.objects.all()
     serializer_class = serializers.ProductSerializer
 
 
-class ProductsDetailUpdateView(RetrieveUpdateAPIView):
+class ProductsDetail(RetrieveAPIView):
     queryset = models.Product.objects.all()
     serializer_class = serializers.ProductSerializer
 
 
-class CreateProductView(CreateAPIView):
+class ProducCreatetView(CreateAPIView):
     queryset = models.Product.objects.all()
+    serializer_class = serializers.ProductCreateSerializer
+
+
+class ProductUpdateView(UpdateAPIView):
+    ueryset = models.Product.objects.all()
     serializer_class = serializers.ProductCreateSerializer
 
 
