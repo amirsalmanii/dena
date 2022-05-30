@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     'products',
     'news',
     'discount',
+    'tags',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
