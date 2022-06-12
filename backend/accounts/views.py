@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.authtoken.models import Token
 from . import serializers
@@ -9,7 +9,7 @@ from .models import User
 
 
 class MyPagination(PageNumberPagination):
-    page_size = 20
+    page_size = 2
 
 
 class LoginUserView(APIView):
@@ -48,8 +48,14 @@ class RegisterUserView(APIView):
         return Response(serializer.errors, status=400)
 
 
-class UsersListView(ListAPIView):
+class UsersListView(ListCreateAPIView):
     queryset = User.objects.all()
+    serializer_class = serializers.UserSerializer
+    pagination_class = MyPagination
+
+
+class AdminsListView(ListCreateAPIView):
+    queryset = User.objects.filter(is_superuser=True)
     serializer_class = serializers.UserSerializer
 
 
@@ -58,7 +64,7 @@ class UserDetailUpdateView(APIView):
         user = User.objects.filter(id=pk)
         if user:
             user = user.first()
-            serializer = serializers.UserDetailSerializer(user)
+            serializer = serializers.UserDetailSerializer(user, context={'request': request})
             return Response(serializer.data, status=200)
         return Response(status=404)
     
@@ -66,12 +72,19 @@ class UserDetailUpdateView(APIView):
         user = User.objects.filter(id=pk)
         if user:
             user = user.first()
-            serializer = serializers.UserDetailSerializer(instance=user, data=request.data)
+            serializer = serializers.UserDetailSerializer(instance=user, data=request.data, context={'request': request})
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=200)
             else:
                 return Response(serializer.errors, status=400)
+        return Response(status=404)
+
+    def delete(self, request, pk):
+        user = User.objects.filter(id=pk)
+        if user:
+            user.delete()
+            return Response(status=204)
         return Response(status=404)
 
 
