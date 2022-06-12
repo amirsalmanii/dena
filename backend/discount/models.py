@@ -12,7 +12,7 @@ class Discount(models.Model):
     valid_to = models.DateField(blank=True, null=True)
 
 
-@receiver(pre_save, sender=pre_save)
+@receiver(pre_save, sender=Discount)
 def change_date(sender, instance, *args, **kwargs):
     date_from = instance.valid_from
     date_to = instance.valid_to
