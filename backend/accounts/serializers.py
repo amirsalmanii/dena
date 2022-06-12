@@ -25,11 +25,18 @@ class RegisterSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'is_superuser', 'first_name', 'last_name', 'email')
+        exclude = ('password', 'groups', 'user_permissions', 'date_joined', 'last_login', 'is_active')
+
+    def create(self, validated_data):
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ('password', 'groups', 'user_permissions', 'date_joined', 'last_login')
+        exclude = ('password', 'groups', 'user_permissions', 'date_joined', 'last_login', 'is_active')
         
