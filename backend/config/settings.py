@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     'news',
     'discount',
     'tags',
+    'orders',
+    'club',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
@@ -30,6 +32,7 @@ INSTALLED_APPS = [
     'django_crontab',
     'ckeditor',
     'ckeditor_uploader',
+    'django_filters',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
