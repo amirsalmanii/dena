@@ -2,9 +2,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView, CreateAPIView
 from . import serializers, models
+from accounts.views import MyPagination
 
 
 class ListNewsCategoryCreateView(ListCreateAPIView):
+    pagination_class = MyPagination
+    queryset = models.NewsCategory.objects.all()
+    serializer_class = serializers.NewsCategorySerializer
+
+
+class ListNewsCategoryCreatem2View(ListCreateAPIView):
     queryset = models.NewsCategory.objects.all()
     serializer_class = serializers.NewsCategorySerializer
 
@@ -15,6 +22,7 @@ class NewsCategoryUpdateDetailDestroyView(RetrieveUpdateDestroyAPIView):
 
 
 class ListNewsView(ListAPIView):
+    pagination_class = MyPagination
     queryset = models.News.objects.all()
     serializer_class = serializers.NewsSerializer
 
@@ -28,7 +36,7 @@ class NewsUpdateDetailDestroyView(APIView):
     def get(self, request, pk):
         news = models.News.objects.filter(id=pk)
         if news:
-            serializer = serializers.NewsSerializer(news.first())
+            serializer = serializers.NewsSerializer(news.first(), context={'request': request})
             return Response(serializer.data, status=200)
         return Response(status=404)
 
