@@ -8,6 +8,7 @@ class User(AbstractUser):
     username = None
     first_name = models.CharField(max_length=200, blank=True)
     last_name = models.CharField(max_length=200, blank=True)
+    avatar = models.ImageField(upload_to='profiles/', null=True, blank=True)
     email = models.EmailField(_('email address'), unique=True)
 
     # address fields
@@ -16,7 +17,7 @@ class User(AbstractUser):
     address = models.TextField(blank=True)
     plate = models.CharField(max_length=5, blank=True) # pelak khane
     zip_code = models.CharField(max_length=10, blank=True)
-    phone_number = models.CharField(max_length=11, blank=True)
+    phone_number = models.CharField(max_length=11, blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
