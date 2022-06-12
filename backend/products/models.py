@@ -39,6 +39,7 @@ class Product(models.Model):
     price = models.BigIntegerField(default=0)
     company_price = models.BigIntegerField(default=0)
     price_after_discount = models.BigIntegerField(default=0)
+    discount_percent = models.BigIntegerField(default=0)
     manufacturer_company = models.CharField(max_length=120, null=True, blank=True)
     repository_quantity = models.PositiveBigIntegerField(default=0)
 
