@@ -30,6 +30,7 @@ class Product(models.Model):
     slug = models.SlugField(
         max_length=255, unique=True, blank=True, null=True, allow_unicode=True
     )
+    rating = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to="products/", blank=True, null=True)
     image2 = models.ImageField(upload_to="products/", blank=True, null=True)
     image3 = models.ImageField(upload_to="products/", blank=True, null=True)
