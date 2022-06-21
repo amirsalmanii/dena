@@ -10,6 +10,7 @@ THUMB_SIZE = (400, 400)
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
+    image = models.ImageField(upload_to="categories/", blank=True, null=True)
     slug = models.SlugField(max_length=254, allow_unicode=True, blank=True)
 
     class Meta:
@@ -30,6 +31,8 @@ class Product(models.Model):
     slug = models.SlugField(
         max_length=255, unique=True, blank=True, null=True, allow_unicode=True
     )
+    colors = models.TextField(blank=True, null=True, default="")
+    hashtag = models.TextField(blank=True, null=True, default="")
     rating = models.PositiveIntegerField(default=0)
     image = models.ImageField(upload_to="products/", blank=True, null=True)
     image2 = models.ImageField(upload_to="products/", blank=True, null=True)
