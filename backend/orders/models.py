@@ -9,7 +9,7 @@ from accounts.models import User
 
 class Order(models.Model):
     PAYMENT_STATUS = (
-        ("p", "payed"), # w --> waited
+        ("p", "payed"),  # w --> waited
         ("r", "refund")
     )
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -35,14 +35,15 @@ def set_amount(sender, instance, *args, **kwargs):
 
 
 class OrderItems(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE) # frontend send
-    product_price = models.PositiveBigIntegerField() # frontend send
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)  # frontend send
+    product_price = models.PositiveBigIntegerField()  # frontend send
+    color = models.CharField(max_length=240, null=True, blank=True, default="")  # frontend send
     product_company_price = models.BigIntegerField(default=0)
     total_product_company_price = models.PositiveBigIntegerField(null=True, blank=True)
     total_amount = models.PositiveBigIntegerField(null=True, blank=True)
     created = models.DateField(auto_now_add=True)
-    quantity = models.PositiveIntegerField(default=0) # frontend send
-    order_id = models.UUIDField(null=True, blank=True) # frontend send
+    quantity = models.PositiveIntegerField(default=0)  # frontend send
+    order_id = models.UUIDField(null=True, blank=True)  # frontend send
 
     def save(self, *args, **kwargs):
         self.product_company_price = self.product.company_price
@@ -61,9 +62,11 @@ def set_quntity(sender, instance, *args, **kwargs):
     value_of_product = instance.product.repository_quantity
     value_of_product -= instance.quantity
     if value_of_product >= 0:
+        instance.product.rating += 1  # when client buy this product we add 1 rating (need to best sells)
         instance.product.repository_quantity = value_of_product
         instance.product.save()
     elif value_of_product < 0:
+        instance.product.rating += 1
         instance.product.repository_quantity = 0
         instance.product.save()
 
@@ -84,7 +87,7 @@ def set_refund(sender, instance, *args, **kwargs):
     """
     when admin set confirmation true wen set this order status to refund
     """
-    if instance.Confirmation == True:
+    if instance.Confirmation:
         orderid = instance.order_id
         exists = Order.objects.filter(order_id=orderid)
         if exists:
