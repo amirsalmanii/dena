@@ -2,6 +2,7 @@ from rest_framework import serializers
 from . import models
 from tags.serializers import TagsSerializer
 
+
 class CreateCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
@@ -14,6 +15,7 @@ class CategoriesSerializer(serializers.ModelSerializer):
         model = models.Category
         fields = [
             "id",
+            "image",
             "name",
             "slug",
         ]
