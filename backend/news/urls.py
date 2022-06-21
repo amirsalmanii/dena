@@ -9,5 +9,4 @@ urlpatterns = [
     path('news/', views.ListNewsView.as_view(), name='news_list'),
     path('news/create/', views.CreateNewsView.as_view(), name='news_create'),
     path('news/<int:pk>/', views.NewsUpdateDetailDestroyView.as_view(), name='news_create'),
-
 ]
