@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'tags',
     'orders',
     'club',
+    'mark',
     # third party
     'rest_framework',
     'rest_framework.authtoken',
