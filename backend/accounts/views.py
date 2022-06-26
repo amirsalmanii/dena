@@ -107,3 +107,12 @@ class ForgetPassword(APIView):
                 return Response(status=404)
         else:
             return Response(serializer.errors, status=400)
+
+
+class UserProfileDetail(APIView):
+    def get(self, request):
+        user = request.user
+        if user.is_anonymous:
+            return Response(status=404)
+        serializer = serializers.UserDetailSerializer(user)
+        return Response(serializer.data)
