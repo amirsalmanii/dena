@@ -12,9 +12,16 @@ class Order(models.Model):
         ("p", "payed"),  # w --> waited
         ("r", "refund")
     )
+    ORDER_STATUS = (
+        ("ds", "دریافت سفارش"),
+        ("am", "آماده سازی"),
+        ("de", "درحال ارسال"),
+        ("tp", "تحویل به پست")
+    )
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, related_name='order')
-    payment_status = models.CharField(choices=PAYMENT_STATUS, max_length=20)
+    payment_status = models.CharField(choices=PAYMENT_STATUS, max_length=1)
+    order_status = models.CharField(choices=ORDER_STATUS, max_length=2, default=ORDER_STATUS[0][0], blank=True, null=True)
     total_price = models.BigIntegerField(null=True, blank=True)
     confirmation = models.BooleanField(default=False)
     payment_date = models.DateField(blank=True, null=True)
