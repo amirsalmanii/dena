@@ -74,7 +74,7 @@ class ProducCreatetView(CreateAPIView):
 
 
 class ProductUpdateView(UpdateAPIView):
-    ueryset = models.Product.objects.all()
+    queryset = models.Product.objects.all()
     serializer_class = serializers.ProductCreateSerializer
 
 
