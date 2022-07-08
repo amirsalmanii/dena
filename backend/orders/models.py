@@ -66,6 +66,12 @@ def set_quntity(sender, instance, *args, **kwargs):
     If they buy products from the threat of buying
     that product, the total number in the warehouse will be reduced
     """
+
+    # this section add 1 to buyed products categories (for most loved categories)
+    product_category = instance.product.categories
+    product_category.rating += instance.quantity
+    product_category.save()
+
     value_of_product = instance.product.repository_quantity
     value_of_product -= instance.quantity
     if value_of_product >= 0:
