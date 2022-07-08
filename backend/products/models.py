@@ -12,6 +12,7 @@ class Category(models.Model):
     name = models.CharField(max_length=200)
     image = models.ImageField(upload_to="categories/", blank=True, null=True)
     slug = models.SlugField(max_length=254, allow_unicode=True, blank=True)
+    rating = models.BigIntegerField(default=0)
 
     class Meta:
         ordering = ("-id",)
