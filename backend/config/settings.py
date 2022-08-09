@@ -1,4 +1,5 @@
 from pathlib import Path
+from corsheaders.defaults import default_headers
 from . import secret
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,13 +37,13 @@ INSTALLED_APPS = [
     'django_filters',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -128,3 +129,10 @@ AUTH_USER_MODEL = 'accounts.User'
 CRONJOBS = [
     ('1 0 * * *', 'discount.cron.my_scheduled_job')
 ]
+
+CORS_ALLOW_HEADERS = list(default_headers) + ['Access-Control-Allow-Origin']
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOW_HEADERS = default_headers + (
+#     'Access-Control-Allow-Origin',
+# )

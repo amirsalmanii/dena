@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,9 +13,21 @@ class MyPagination(PageNumberPagination):
     page_size = 2
 
 
+class SetToken(APIView):
+    def get(self, request):
+        response = Response()
+        response.set_cookie('key', 'value')
+        response.data = {
+            'detail': 'ok'
+        }
+        return response
+
+
 class LoginUserView(APIView):
     def post(self, request):
+        max_age = 365 * 24 * 60 * 60
         serializer = serializers.LoginSerializer(data=request.data)
+        expires = datetime.datetime.utcnow() + datetime.timedelta(minutes=60)
         if serializer.is_valid():
             email = serializer.validated_data['email']
             password = serializer.validated_data['password']
@@ -24,11 +37,23 @@ class LoginUserView(APIView):
                     have_token = Token.objects.get(user=user)
                 except:
                     user_token = Token.objects.create(user=user)
-                    return Response({'token':user_token.key}, status=200)
+                    response = Response()
+                    response.set_cookie(key='token', value='user_token', httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age, samesite='None', domain='127.0.0.1')
+                    response.data = {
+                        'detail': 'success1',
+                    }
+                    response.status_code = 200
+                    return response
                 else:
-                    return Response({'token':have_token.key}, status=200)
+                    response = Response()
+                    response.set_cookie(key='token', value= have_token, httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age)
+                    response.data = {
+                        'detail': 'success',
+                    }
+                    response.status_code = 200
+                    return response
             else:
-                return Response('رمز و ایمیل صحیح نمی باشد') # no user in system
+                return Response('رمز و ایمیل صحیح نمی باشد', status=400) # no user in system
         return Response(serializer.errors, status=400)
 
 
@@ -116,3 +141,11 @@ class UserProfileDetail(APIView):
             return Response(status=404)
         serializer = serializers.UserDetailSerializer(user)
         return Response(serializer.data)
+
+
+class UserTestA(APIView):
+    def get(self, request):
+        # print('+++++++++++++++++++++++++++++')
+        print(request.COOKIES)
+        token = request.COOKIES.get('token')
+        return Response({'token': token})
