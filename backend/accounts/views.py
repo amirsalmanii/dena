@@ -10,17 +10,29 @@ from .models import User
 
 
 class MyPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 20
 
 
-class SetToken(APIView):
+class SetUser(APIView):
+    """
+    set user some data to frontend
+    """
     def get(self, request):
-        response = Response()
-        response.set_cookie('key', 'value')
-        response.data = {
-            'detail': 'ok'
-        }
-        return response
+        #token = request.COOKIES.get('token')
+        #user = Token.objects.filter(key=token)
+        user = request.user
+        try:
+            email = user.email
+        except:
+            return Response('user not found', status=401)
+        else:
+            #user = user.first()
+            #user = user.user
+            serializer = serializers.UserSerializer(user)
+        
+            
+            return Response({"user_data":serializer.data}, status=200)
+        return Response("user not found", status=401) 
 
 
 class LoginUserView(APIView):
@@ -33,23 +45,27 @@ class LoginUserView(APIView):
             password = serializer.validated_data['password']
             user = authenticate(email=email, password=password)
             if user:
+                serializer = serializers.UserSerializer(user)
                 try:
                     have_token = Token.objects.get(user=user)
                 except:
                     user_token = Token.objects.create(user=user)
                     response = Response()
-                    response.set_cookie(key='token', value='user_token', httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age, samesite='None', domain='127.0.0.1')
+                    #response.set_cookie(key='token', value='user_token', httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age, samesite='None', domain='127.0.0.1')
                     response.data = {
-                        'detail': 'success1',
+                        "token": f"{user_token}",
+                        "user_data": serializer.data,
                     }
                     response.status_code = 200
                     return response
                 else:
                     response = Response()
-                    response.set_cookie(key='token', value= have_token, httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age)
+                    #response.set_cookie(key='token', value= have_token, httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age)
                     response.data = {
-                        'detail': 'success',
+                        "token": f"{have_token}",
+                        "user_data": serializer.data,
                     }
+                    print(have_token)
                     response.status_code = 200
                     return response
             else:
