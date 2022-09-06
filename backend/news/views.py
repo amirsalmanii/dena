@@ -27,6 +27,11 @@ class ListNewsView(ListAPIView):
     serializer_class = serializers.NewsSerializer
 
 
+class LastNewsListView(ListAPIView):
+    queryset = models.News.objects.all()[:3]
+    serializer_class = serializers.NewsSerializer
+
+
 class CreateNewsView(CreateAPIView):
     queryset = models.News.objects.all()
     serializer_class = serializers.NewsCreateSerializer
@@ -57,3 +62,9 @@ class NewsUpdateDetailDestroyView(APIView):
             news.delete()
             return Response(status=204)
         return Response(status=404)
+
+
+class SendUserAgent(APIView):
+    def get(self, request):
+        user_agent = request.META['HTTP_USER_AGENT']
+        return Response({'user_agent': user_agent}, status=200)

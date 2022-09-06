@@ -51,7 +51,7 @@ class LoginUserView(APIView):
                 except:
                     user_token = Token.objects.create(user=user)
                     response = Response()
-                    #response.set_cookie(key='token', value='user_token', httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age, samesite='None', domain='127.0.0.1')
+                    response.set_cookie(key='token2', value=user_token, httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age, samesite='Lax', domain='denasavaran-urmia.ir')
                     response.data = {
                         "token": f"{user_token}",
                         "user_data": serializer.data,
@@ -60,7 +60,7 @@ class LoginUserView(APIView):
                     return response
                 else:
                     response = Response()
-                    #response.set_cookie(key='token', value= have_token, httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age)
+                    response.set_cookie(key='token2', value=have_token, httponly=True, expires=expires.strftime("%a, %d-%b-%Y %H:%M:%S UTC"), max_age=max_age, samesite='Lax', domain='denasavaran-urmia.ir')
                     response.data = {
                         "token": f"{have_token}",
                         "user_data": serializer.data,
